@@ -1,0 +1,134 @@
+name: Build Electron Application
+
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        type: boolean
+        description: Release artifacts
+        required: false
+        default: false
+  push:
+    branches:
+      - "main"
+    paths:
+      - "um-react"
+
+permissions:
+  contents: write
+
+jobs:
+  build-linux-windows:
+    name: Build Linux & Windows
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+
+      - name: Install system dependencies
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install npm wine32
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - name: Install npm dependencies
+        run: |
+          git submodule update --init --recursive
+          cd um-react
+          pnpm install --frozen-lockfile
+          cd ..
+          npm install --frozen-lockfile
+
+      - name: Update version
+        id: version
+        run: |
+          um_ver=$(npm info ./um-react version)
+          npm version $um_ver || true
+          echo $um_ver
+          echo version=$um_ver >> "$GITHUB_OUTPUT"
+
+      - name: Build
+        run: |
+          npm run build:win
+          npm run build:linux
+
+      - name: Upload Windows build
+        uses: actions/upload-artifact@v4.0.0
+        with:
+          name: Windows build 7z
+          path: release/**/*.7z
+
+      - name: Upload Linux build
+        uses: actions/upload-artifact@v4.0.0
+        with:
+          name: Linux build AppImage
+          path: release/**/*.AppImage
+
+  build-macos:
+    name: Build macOS
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+
+      - name: Install system dependencies
+        run: brew install node
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - name: Install npm dependencies
+        run: |
+          git submodule update --init --recursive
+          cd um-react
+          pnpm install --frozen-lockfile
+          cd ..
+          npm install --frozen-lockfile
+
+      - name: Update version
+        run: |
+          um_ver=$(npm info ./um-react version)
+          npm version $um_ver || true
+          echo $um_ver
+    
+      - name: Build
+        run: |
+          npm run build:mac
+
+      - name: Upload macOS build
+        uses: actions/upload-artifact@v4.0.0
+        with:
+          name: macOS build dmg
+          path: release/**/*.dmg
+
+  upload-release:
+    name: Upload Release
+    runs-on: ubuntu-latest
+    if: ${{ inputs.release }}
+    needs: [build-linux-windows, build-macos]
+    steps:
+      - name: Download release files
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+
+      - name: Upload release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ needs.build-linux-windows.outputs.version }}/*
+          tag: ${{ needs.build-linux-windows.outputs.version }}
+          body: Release ${{ needs.build-linux-windows.outputs.version }}
+          overwrite: true
+          file_glob: true

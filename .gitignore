@@ -26,18 +26,3 @@ src/default/**/*
 *.njsproj
 *.sln
 *.sw?
-
-# Ignore the same patterns in the "um-react" directory
-um-react/logs/
-um-react/*.log
-um-react/npm-debug.log*
-um-react/yarn-debug.log*
-um-react/yarn-error.log*
-um-react/pnpm-debug.log*
-um-react/lerna-debug.log*
-
-um-react/node_modules/
-um-react/coverage/
-um-react/dist/
-um-react/dist-ssr/
-um-react/*.local

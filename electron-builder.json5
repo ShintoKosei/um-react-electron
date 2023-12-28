@@ -14,9 +14,12 @@
   ],
   "mac": {
     "icon": "build/icon.icns",
-    "artifactName": "${name}-${version}-osx64.${ext}",
+    "artifactName": "${name}-${version}-macos-${arch}.${ext}",
     "target": [
-      "dmg"
+      {
+        target: "dmg",
+        arch: ["arm64", "x64"]
+      }
     ],
     "files": [
       "!**/.vscode/*",
@@ -37,7 +40,7 @@
         "target": "7z"
       }
     ],
-    "artifactName": "${name}-${version}-winx64.${ext}",
+    "artifactName": "${name}-${version}-win-${arch}.${ext}",
     "files": [
       "!**/.vscode/*",
       "!{.eslintignore,.eslintrc.js,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}"
@@ -51,7 +54,16 @@
     "installerIcon": "build/icon.ico",
     "uninstallerIcon": "build/icon.ico",
     "uninstallDisplayName": "${name}-${version}",
-    "artifactName": "${name}-${version}-winx64-setup.${ext}",
+    "artifactName": "${name}-${version}-win-${arch}-setup.${ext}",
     "shortcutName": "${productName}"
-  }
+  },
+  "linux": {
+    "icon": "build/icon.png",
+    "target": "AppImage",
+    "artifactName": "${name}-${version}-${arch}.${ext}",
+    "files": [
+      "!**/.vscode/*",
+      "!{.eslintignore,.eslintrc.js,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}"
+    ]
+  },
 }
