@@ -13,6 +13,7 @@ on:
       - "main"
     paths:
       - "um-react"
+      - ".github/workflows/build-electron.yml"
 
 permissions:
   contents: write
@@ -51,7 +52,7 @@ jobs:
         id: version
         run: |
           um_ver=$(npm info ./um-react version)
-          npm version $um_ver || true
+          npm version $um_ver --allow-same-version --no-commit-hooks --no-git-tag-version
           echo $um_ver
           echo version=$um_ver >> "$GITHUB_OUTPUT"
 
@@ -99,7 +100,7 @@ jobs:
       - name: Update version
         run: |
           um_ver=$(npm info ./um-react version)
-          npm version $um_ver || true
+          npm version $um_ver --allow-same-version --no-commit-hooks --no-git-tag-version
           echo $um_ver
     
       - name: Build
