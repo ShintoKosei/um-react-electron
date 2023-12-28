@@ -115,7 +115,7 @@ jobs:
   upload-release:
     name: Upload Release
     runs-on: ubuntu-latest
-    if: ${{ inputs.release }}
+    if: ${{ inputs.release || github.event_name == 'push' }}
     needs: [build-linux-windows, build-macos]
     steps:
       - name: Download release files
