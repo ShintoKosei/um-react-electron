@@ -1,0 +1,29 @@
+name: Update um-react
+
+on:
+  repository_dispatch:
+    types: [new-tag]
+
+permissions:
+  contents: write
+
+jobs:
+  update-um-react:
+    name: Update um-react
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+
+      - name: Update repo
+        run: |
+          git submodule update --init
+          cd um-react
+          git checkout ${{ github.event.client_payload.tag }}
+          cd ..
+
+      - name: Push
+        uses: actions4git/add-commit-push@v1
+        with:
+          commit-message: Update um-react to ${{ github.event.client_payload.tag }}
+  
