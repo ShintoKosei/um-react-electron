@@ -13,7 +13,6 @@ on:
       - "main"
     paths:
       - "um-react"
-      - ".github/workflows/build-electron.yml"
 
 permissions:
   contents: write
