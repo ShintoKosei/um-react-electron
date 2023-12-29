@@ -1,6 +1,6 @@
 https://github.com/dfvips/um-react-electron 的镜像
 
-# Unlock Music 音乐解锁 Electron 应用程序
+# Unlock Music 音乐解锁 Electron 应用程序 [![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/CarlGao4/um-react-electron/.github%2Fworkflows%2Fupdate-um-react.yml) ![GitHub all releases](https://img.shields.io/github/downloads/CarlGao4/um-react-electron/total) ![GitHub release](https://img.shields.io/github/v/release/CarlGao4/um-react-electron)](https://github.com/CarlGao4/um-react-electron/releases)
 
 - 在Electron应用程序中解锁加密的音乐文件。 Unlock encrypted music file in the Electron App.
 - 无需依赖浏览器，开箱即可使用。
