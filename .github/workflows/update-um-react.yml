@@ -24,6 +24,9 @@ jobs:
 
       - name: Push
         uses: actions4git/add-commit-push@v1
+        continue-on-error: true
         with:
           commit-message: Update um-react to ${{ github.event.client_payload.tag }}
-  
+
+      - name: Call build
+        uses: ./.github/workflows/build-electron.yml
