@@ -13,7 +13,7 @@ on:
       - "main"
     paths:
       - "um-react"
-      - ".github/workflows/build-electron.yml"
+  workflow_call:
 
 permissions:
   contents: write
@@ -116,7 +116,7 @@ jobs:
   upload-release:
     name: Upload Release
     runs-on: ubuntu-latest
-    if: ${{ inputs.release || github.event_name == 'push' }}
+    if: ${{ inputs.release || github.event_name == 'push' || github.event_name == 'workflow_call' }}
     needs: [build-linux-windows, build-macos]
     steps:
       - name: Download release files
