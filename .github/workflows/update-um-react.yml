@@ -11,6 +11,8 @@ jobs:
   update-um-react:
     name: Update um-react
     runs-on: ubuntu-latest
+    outputs:
+      commit: ${{ steps.push.outputs.pushed && steps.push.outputs.commit-sha || github.sha }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4.1.1
@@ -23,6 +25,7 @@ jobs:
           cd ..
 
       - name: Push
+        id: push
         uses: actions4git/add-commit-push@v1
         continue-on-error: true
         with:
@@ -31,3 +34,5 @@ jobs:
   call-build:
     uses: ./.github/workflows/build-electron.yml
     needs: update-um-react
+    with:
+      commit: ${{ needs.update-um-react.outputs.commit }}
