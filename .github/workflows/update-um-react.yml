@@ -28,5 +28,6 @@ jobs:
         with:
           commit-message: Update um-react to ${{ github.event.client_payload.tag }}
 
-      - name: Call build
-        uses: ./.github/workflows/build-electron.yml
+  call-build:
+    uses: ./.github/workflows/build-electron.yml
+    needs: update-um-react
