@@ -4,6 +4,7 @@ https://github.com/dfvips/um-react-electron 的镜像
 
 - 在Electron应用程序中解锁加密的音乐文件。 Unlock encrypted music file in the Electron App.
 - 无需依赖浏览器，开箱即可使用。
+- 支持一键下载全部
 
 ## 下载地址
 
