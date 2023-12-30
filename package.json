@@ -1,6 +1,6 @@
 {
   "name": "um-react-electron",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Unlock Music 音乐解锁 (React) Electron App",
   "main": "./src/main.js",
   "author": "dreamfly",
