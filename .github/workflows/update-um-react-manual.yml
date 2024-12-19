@@ -1,4 +1,4 @@
-name: Update um-react
+name: Update um-react manual
 
 on:
   workflow_dispatch:
