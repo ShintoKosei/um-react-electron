@@ -1,0 +1,42 @@
+name: Update um-react
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: 'Commit to fetch'
+        type: string
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  update-um-react:
+    name: Update um-react
+    runs-on: ubuntu-latest
+    outputs:
+      commit: ${{ steps.push.outputs.pushed && steps.push.outputs.commit-sha || github.sha }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+
+      - name: Update repo
+        run: |
+          git submodule update --init
+          cd um-react
+          git checkout ${{ inputs.commit }}
+          cd ..
+
+      - name: Push
+        id: push
+        uses: actions4git/add-commit-push@v1
+        continue-on-error: true
+        with:
+          commit-message: Update um-react to ${{ inputs.commit }}
+
+  call-build:
+    uses: ./.github/workflows/build-electron.yml
+    needs: update-um-react
+    with:
+      commit: ${{ needs.update-um-react.outputs.commit }}
