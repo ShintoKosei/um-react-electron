@@ -18,6 +18,9 @@ on:
       commit:
         type: string
         default: main
+      release:
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -135,6 +138,6 @@ jobs:
           file: ${{ needs.build-linux-windows.outputs.version }}/*
           tag: ${{ needs.build-linux-windows.outputs.version }}
           body: Release ${{ needs.build-linux-windows.outputs.version }}
-          target_commit: ${{ github.event_name == 'repository_dispatch' && inputs.commit || github.sha }}
+          target_commit: ${{ inputs.commit || github.sha }}
           overwrite: true
           file_glob: true
