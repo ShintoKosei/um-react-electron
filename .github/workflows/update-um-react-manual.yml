@@ -7,6 +7,11 @@ on:
         description: 'Commit to fetch'
         type: string
         required: true
+      release:
+        description: 'Create a release for this update'
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: write
@@ -40,3 +45,4 @@ jobs:
     needs: update-um-react
     with:
       commit: ${{ needs.update-um-react.outputs.commit }}
+      release: ${{ inputs.release }}
